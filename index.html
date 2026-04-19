@@ -1,0 +1,671 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary);background:transparent}
+.app{max-width:960px;margin:0 auto;padding:0.75rem 0}
+.nav{display:flex;gap:2px;margin-bottom:1.25rem;border-bottom:0.5px solid var(--color-border-tertiary);padding-bottom:0;overflow-x:auto}
+.nav-btn{padding:8px 13px;border:none;background:none;cursor:pointer;font-size:12px;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;border-radius:0}
+.nav-btn.active{color:var(--color-text-primary);border-bottom-color:#185FA5;font-weight:500}
+.nav-btn:hover:not(.active){background:var(--color-background-secondary);border-radius:6px 6px 0 0}
+.tab{display:none}.tab.active{display:block}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.1rem 1.25rem;margin-bottom:1rem}
+.sec{font-size:14px;font-weight:500;margin-bottom:0.9rem;color:var(--color-text-primary)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.field{display:flex;flex-direction:column;gap:3px}
+.field label{font-size:11px;color:var(--color-text-secondary)}
+.field input,.field select,.field textarea{border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:6px 9px;font-size:13px;background:var(--color-background-primary);color:var(--color-text-primary)}
+.field textarea{resize:vertical;min-height:56px}
+.btn{border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:7px 14px;font-size:12px;cursor:pointer;background:none;color:var(--color-text-primary)}
+.btn:hover{background:var(--color-background-secondary)}
+.btn-blue{background:#185FA5;color:#fff;border-color:#185FA5}
+.btn-blue:hover{background:#0c447c}
+.btn-red{background:#FCEBEB;color:#791F1F;border-color:#F09595}
+.btn-red:hover{background:#F7C1C1}
+.btn-sm{padding:4px 10px;font-size:11px}
+.murid-list{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);overflow:hidden;margin-bottom:1rem}
+.murid-row{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:0.5px solid var(--color-border-tertiary);font-size:13px}
+.murid-row:last-child{border-bottom:none}
+.murid-row:hover{background:var(--color-background-secondary)}
+.murid-row.active-row{background:#E6F1FB}
+.avatar{width:30px;height:30px;border-radius:50%;background:#E6F1FB;color:#0C447C;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0}
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:500}
+.b-t1{background:#FCEBEB;color:#791F1F}.b-t2{background:#FAEEDA;color:#633806}.b-t3{background:#EAF3DE;color:#27500A}.b-t4{background:#E6F1FB;color:#0C447C}.b-none{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.profil-tier{border-radius:var(--border-radius-lg);padding:1rem;margin-bottom:0.75rem;border:0.5px solid var(--color-border-tertiary)}
+.pt1{background:#FCEBEB;border-color:#F09595}.pt2{background:#FAEEDA;border-color:#FAC775}.pt3{background:#EAF3DE;border-color:#C0DD97}.pt4{background:#E6F1FB;border-color:#85B7EB}
+.pt-active{border-width:2px!important}
+.stat4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:1rem}
+.stat-c{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:0.7rem;text-align:center}
+.stat-v{font-size:19px;font-weight:500}
+.stat-l{font-size:10px;color:var(--color-text-secondary);margin-top:2px}
+.graf-wrap{position:relative;height:250px;margin:0.75rem 0}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--color-text-secondary);margin-top:6px}
+.leg-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.no-data{padding:2rem;text-align:center;color:var(--color-text-secondary);font-size:13px}
+.upload-area{border:0.5px dashed var(--color-border-secondary);border-radius:var(--border-radius-md);padding:8px 12px;text-align:center;cursor:pointer;color:var(--color-text-secondary);font-size:12px;display:flex;align-items:center;justify-content:center;gap:6px}
+.upload-area:hover{background:var(--color-background-secondary)}
+.rekod-entry{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:1rem;margin-bottom:0.75rem}
+.rekod-entry-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;padding-bottom:0.6rem;border-bottom:0.5px solid var(--color-border-tertiary)}
+.dot3{display:inline-flex;gap:4px}
+.dot3 span{width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;cursor:pointer;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.dot3 span.d1.on{background:#F09595;border-color:#A32D2D;color:#501313}
+.dot3 span.d2.on{background:#FAC775;border-color:#854F0B;color:#412402}
+.dot3 span.d3.on{background:#97C459;border-color:#3B6D11;color:#173404}
+.rekod-hdr{display:flex;align-items:center;gap:8px;margin-bottom:1rem;flex-wrap:wrap}
+select{border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:5px 8px;font-size:12px;background:var(--color-background-primary);color:var(--color-text-primary)}
+input[type=file]{display:none}
+.skor-strip{display:flex;gap:10px;padding:0.9rem;background:var(--color-background-secondary);border-radius:var(--border-radius-md);margin-top:0.75rem;flex-wrap:wrap}
+.sk-item{text-align:center;flex:1;min-width:60px}
+.sk-val{font-size:20px;font-weight:500}
+.sk-lbl{font-size:10px;color:var(--color-text-secondary);margin-top:1px}
+
+/* ── DIAGNOSTIK TABLE ── */
+.diag-wrap{overflow-x:auto}
+.diag-tbl{width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed}
+.diag-tbl th{background:var(--color-background-secondary);padding:8px 10px;text-align:center;font-weight:500;font-size:11px;color:var(--color-text-secondary);border:0.5px solid var(--color-border-tertiary)}
+.diag-tbl th.th-left{text-align:left}
+.diag-tbl td{padding:7px 8px;border:0.5px solid var(--color-border-tertiary);vertical-align:middle}
+.k-hdr td{background:#E6F1FB;color:#0C447C;font-weight:500;font-size:11px;padding:6px 10px}
+.pil-btn{display:block;width:100%;padding:6px 4px;border:1.5px solid var(--color-border-secondary);border-radius:6px;background:var(--color-background-primary);color:var(--color-text-secondary);font-size:11px;font-weight:500;cursor:pointer;text-align:center;transition:background 0.1s,border-color 0.1s,color 0.1s;user-select:none;-webkit-user-select:none}
+.pil-btn:hover{background:var(--color-background-secondary)}
+.pil-btn.aktif-b{background:#EAF3DE;border-color:#3B6D11;color:#27500A}
+.pil-btn.aktif-s{background:#FAEEDA;border-color:#854F0B;color:#633806}
+.pil-btn.aktif-t{background:#FCEBEB;border-color:#A32D2D;color:#791F1F}
+.cat-input{width:100%;border:0.5px solid var(--color-border-secondary);border-radius:6px;padding:4px 7px;font-size:11px;background:var(--color-background-primary);color:var(--color-text-primary)}
+</style>
+
+<div class="app">
+<h2 class="sr-only">Sistem Analisis dan Pemantauan Perkembangan Membaca Murid Bahasa Melayu</h2>
+
+<div style="margin-bottom:1rem">
+  <div style="font-size:17px;font-weight:500">Sistem Pemantauan Membaca</div>
+  <div style="font-size:11px;color:var(--color-text-secondary);margin-top:2px">Bahasa Melayu Sekolah Rendah</div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="showTab('murid')">Senarai Murid</button>
+  <button class="nav-btn" onclick="showTab('diag')">Diagnostik</button>
+  <button class="nav-btn" onclick="showTab('profil')">Profil</button>
+  <button class="nav-btn" onclick="showTab('rekod')">Rekod Mingguan</button>
+  <button class="nav-btn" onclick="showTab('graf')">Graf Kemajuan</button>
+</div>
+
+<!-- ══ SENARAI MURID ══ -->
+<div class="tab active" id="tab-murid">
+  <div class="card">
+    <div class="sec">Pengurusan Senarai Murid</div>
+    <div class="row3" style="margin-bottom:0.75rem">
+      <div class="field"><label>Nama Murid</label><input id="inp-nama" type="text" placeholder="Masukkan nama penuh"></div>
+      <div class="field"><label>Tahun / Kelas</label><input id="inp-kelas" type="text" placeholder="cth: Tahun 2 Bestari"></div>
+      <div class="field"><label>Nama Guru</label><input id="inp-guru" type="text" placeholder="Nama guru pemantau"></div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <button class="btn btn-blue" onclick="tambahMurid()">+ Tambah Murid</button>
+      <div class="upload-area" style="flex:1;margin:0" onclick="document.getElementById('fileUpload').click()">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><path d="M8 1v9M5 4l3-3 3 3M2 12h12v2H2v-2z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Muat naik senarai murid (.txt atau .csv — satu nama setiap baris)
+      </div>
+      <input type="file" id="fileUpload" accept=".txt,.csv" onchange="uploadSenarai(this)">
+    </div>
+  </div>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.9rem">
+      <div class="sec" style="margin:0">Senarai Murid (<span id="bil-murid">0</span> orang)</div>
+      <input type="text" placeholder="Cari nama..." id="cari-murid" oninput="renderSenarai()" style="border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:5px 10px;font-size:12px;width:180px;background:var(--color-background-primary);color:var(--color-text-primary)">
+    </div>
+    <div class="murid-list" id="senarai-murid"><div class="no-data">Belum ada murid. Tambah murid atau muat naik senarai.</div></div>
+    <div id="pilih-msg" style="font-size:12px;color:var(--color-text-secondary);margin-top:6px">Klik nama murid untuk memilih dan mula menilai.</div>
+  </div>
+</div>
+
+<!-- ══ DIAGNOSTIK ══ -->
+<div class="tab" id="tab-diag">
+  <div class="card">
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <div class="field" style="flex:2;min-width:160px">
+        <label>Murid yang dinilai</label>
+        <select id="sel-murid-diag" onchange="loadMuridDiag()"><option value="">— Pilih murid —</option></select>
+      </div>
+      <div class="field" style="flex:1;min-width:110px"><label>Kelas</label><input id="diag-kelas" readonly style="background:var(--color-background-secondary)"></div>
+      <div class="field" style="flex:1;min-width:110px"><label>Tarikh Penilaian</label><input id="diag-tarikh" type="date"></div>
+      <div class="field" style="flex:1;min-width:90px"><label>Guru</label><input id="diag-guru" readonly style="background:var(--color-background-secondary)"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="sec">Borang Diagnostik — 7 Komponen Membaca</div>
+    <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:0.9rem">
+      Klik butang bagi setiap butiran: <span style="background:#EAF3DE;color:#27500A;border-radius:4px;padding:1px 7px;font-weight:500">Boleh</span> = menguasai sepenuhnya &nbsp; <span style="background:#FAEEDA;color:#633806;border-radius:4px;padding:1px 7px;font-weight:500">Separuh</span> = sebahagian &nbsp; <span style="background:#FCEBEB;color:#791F1F;border-radius:4px;padding:1px 7px;font-weight:500">Tidak</span> = belum menguasai
+    </div>
+    <div class="diag-wrap">
+      <table class="diag-tbl">
+        <colgroup>
+          <col style="width:32px">
+          <col style="width:auto">
+          <col style="width:80px">
+          <col style="width:80px">
+          <col style="width:80px">
+          <col style="width:130px">
+        </colgroup>
+        <thead>
+          <tr>
+            <th class="th-left">Bil</th>
+            <th class="th-left">Butiran Dinilai</th>
+            <th>Boleh</th>
+            <th>Separuh</th>
+            <th>Tidak</th>
+            <th class="th-left">Catatan</th>
+          </tr>
+        </thead>
+        <tbody id="diag-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="sec">Rumusan Skor Diagnostik</div>
+    <div class="skor-strip">
+      <div class="sk-item"><div class="sk-val" id="jb" style="color:#3B6D11">0</div><div class="sk-lbl">Boleh</div></div>
+      <div class="sk-item"><div class="sk-val" id="js" style="color:#854F0B">0</div><div class="sk-lbl">Separuh</div></div>
+      <div class="sk-item"><div class="sk-val" id="jt" style="color:#A32D2D">0</div><div class="sk-lbl">Tidak</div></div>
+      <div style="width:0.5px;background:var(--color-border-tertiary)"></div>
+      <div class="sk-item"><div class="sk-val" id="jp" style="color:#185FA5">0%</div><div class="sk-lbl">% Penguasaan</div></div>
+      <div class="sk-item"><div class="sk-val" id="jth" style="font-size:13px">—</div><div class="sk-lbl">Tahap</div></div>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:0.75rem">
+      <button class="btn" onclick="resetDiag()">Set Semula</button>
+      <button class="btn btn-blue" onclick="simpanDiag()">Simpan Rekod Diagnostik</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PROFIL ══ -->
+<div class="tab" id="tab-profil">
+  <div class="card">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem">
+      <div class="field" style="flex:1"><label>Pilih murid</label>
+        <select id="sel-murid-profil" onchange="loadProfil()"><option value="">— Pilih murid —</option></select>
+      </div>
+    </div>
+    <div id="profil-content"><div class="no-data">Pilih murid untuk melihat profil.</div></div>
+  </div>
+  <div class="card">
+    <div class="sec">Klasifikasi Tahap Membaca — Rujukan</div>
+    <div id="tier-ref"></div>
+  </div>
+</div>
+
+<!-- ══ REKOD MINGGUAN ══ -->
+<div class="tab" id="tab-rekod">
+  <div class="card">
+    <div class="rekod-hdr">
+      <div class="field" style="flex:2;min-width:160px">
+        <label>Murid</label>
+        <select id="sel-murid-rekod" onchange="loadRekod()"><option value="">— Pilih murid —</option></select>
+      </div>
+      <div class="field" style="min-width:130px">
+        <label>Pilih minggu</label>
+        <select id="sel-minggu" onchange="loadEntriMinggu()"><option value="">— Pilih minggu —</option></select>
+      </div>
+      <div style="display:flex;gap:6px;align-items:flex-end;flex-wrap:wrap">
+        <button class="btn btn-blue btn-sm" onclick="tambahMinggu()">+ Minggu baharu</button>
+        <button class="btn btn-sm" onclick="simpanRekod()">Simpan</button>
+      </div>
+    </div>
+    <div id="rekod-form"><div class="no-data">Pilih murid dan minggu untuk merekod perkembangan.</div></div>
+  </div>
+  <div class="card">
+    <div class="sec">Semua Rekod Mingguan</div>
+    <div id="rekod-all"><div class="no-data">Tiada rekod.</div></div>
+  </div>
+</div>
+
+<!-- ══ GRAF ══ -->
+<div class="tab" id="tab-graf">
+  <div class="card">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:0.9rem">
+      <div class="field" style="flex:1"><label>Pilih murid</label>
+        <select id="sel-murid-graf" onchange="lukisGraf()"><option value="">— Pilih murid —</option></select>
+      </div>
+    </div>
+    <div class="stat4" id="graf-stats">
+      <div class="stat-c"><div class="stat-v">—</div><div class="stat-l">Nama Murid</div></div>
+      <div class="stat-c"><div class="stat-v">0</div><div class="stat-l">Jumlah Rekod</div></div>
+      <div class="stat-c"><div class="stat-v">—</div><div class="stat-l">Min Skor Terkini</div></div>
+      <div class="stat-c"><div class="stat-v">—</div><div class="stat-l">Trend</div></div>
+    </div>
+    <div class="graf-wrap"><canvas id="grafCanvas"></canvas></div>
+    <div class="legend">
+      <div style="display:flex;align-items:center;gap:4px"><div class="leg-dot" style="background:#185FA5"></div>Kelancaran</div>
+      <div style="display:flex;align-items:center;gap:4px"><div class="leg-dot" style="background:#3B6D11"></div>Sebutan</div>
+      <div style="display:flex;align-items:center;gap:4px"><div class="leg-dot" style="background:#854F0B"></div>Kefahaman</div>
+      <div style="display:flex;align-items:center;gap:4px"><div class="leg-dot" style="background:rgba(163,45,45,0.5)"></div>Sasaran (2.5)</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="sec">Panduan Keputusan Intervensi</div>
+    <table style="width:100%;border-collapse:collapse;font-size:12px">
+      <tr style="background:var(--color-background-secondary)">
+        <th style="padding:7px 8px;text-align:left;font-weight:500;font-size:11px;color:var(--color-text-secondary);border-bottom:0.5px solid var(--color-border-tertiary)">Corak Graf</th>
+        <th style="padding:7px 8px;text-align:left;font-weight:500;font-size:11px;color:var(--color-text-secondary);border-bottom:0.5px solid var(--color-border-tertiary)">Tafsiran</th>
+        <th style="padding:7px 8px;text-align:left;font-weight:500;font-size:11px;color:var(--color-text-secondary);border-bottom:0.5px solid var(--color-border-tertiary)">Tindakan Guru</th>
+      </tr>
+      <tr><td style="padding:7px 8px;border-bottom:0.5px solid var(--color-border-tertiary);color:#3B6D11;font-weight:500">Menaik</td><td style="padding:7px 8px;border-bottom:0.5px solid var(--color-border-tertiary)">Kemajuan yang baik</td><td style="padding:7px 8px;border-bottom:0.5px solid var(--color-border-tertiary)">Kekalkan strategi, tambah cabaran</td></tr>
+      <tr><td style="padding:7px 8px;border-bottom:0.5px solid var(--color-border-tertiary);color:#854F0B;font-weight:500">Mendatar</td><td style="padding:7px 8px;border-bottom:0.5px solid var(--color-border-tertiary)">Kemajuan terhenti</td><td style="padding:7px 8px;border-bottom:0.5px solid var(--color-border-tertiary)">Kaji semula bahan dan kaedah</td></tr>
+      <tr><td style="padding:7px 8px;color:#A32D2D;font-weight:500">Menurun</td><td style="padding:7px 8px">Kemajuan merosot</td><td style="padding:7px 8px">Hubungi ibu bapa, pertimbang rujukan pakar</td></tr>
+    </table>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script>
+const KOMP=[
+  {nama:"1. Huruf & Bunyi",items:["Mengenal huruf vokal (a,e,i,o,u)","Mengenal huruf konsonan dengan betul","Membunyikan huruf dengan tepat","Membezakan huruf besar dan kecil"]},
+  {nama:"2. Suku Kata Terbuka (KV)",items:["Membunyikan suku kata KV (ba,bi,bu...)","Menggabungkan dua suku kata KV","Membaca perkataan dua suku kata KV","Membaca perkataan tiga suku kata KV"]},
+  {nama:"3. Suku Kata Tertutup (KVK)",items:["Membunyikan suku kata KVK (ban,pin...)","Menggabungkan suku kata KV + KVK","Membaca perkataan KVK dengan betul","Membaca perkataan gabungan KV dan KVK"]},
+  {nama:"4. Suku Kata Kompleks",items:["Mengenal suku kata KVKK (bank, helm)","Membaca perkataan suku kata kompleks","Membunyikan gugus konsonan (str,skr...)","Membaca perkataan pinjaman kompleks"]},
+  {nama:"5. Digraf & Diftong",items:["Mengenal digraf (ng,ny,sy,kh,gh)","Membunyikan digraf dalam perkataan","Mengenal diftong (ai,au,oi)","Membaca perkataan yang mengandungi diftong"]},
+  {nama:"6. Ayat",items:["Membaca ayat mudah (3–5 perkataan)","Membaca dengan intonasi yang betul","Membaca ayat tanya dan ayat perintah","Membaca petikan pendek dengan lancar"]},
+  {nama:"7. Kefahaman",items:["Menjawab soalan literal tentang teks","Menerangkan semula isi utama teks","Membuat inferens mudah daripada teks","Menunjukkan minat dan keyakinan membaca"]}
+];
+const TAHAP=[
+  {t:"Tahap 1",n:"Pra-Membaca",min:0,max:39,pcls:"pt1",bcls:"b-t1",col:"#A32D2D",kriteria:"Kurang 40% item dikuasai",lemah:"Huruf & Bunyi, Suku Kata KV",fokus:["Pengecaman huruf vokal dan konsonan","Bunyi huruf asas","Suku kata KV mudah","Aktiviti fonemik intensif"]},
+  {t:"Tahap 2",n:"Membaca Awal",min:40,max:59,pcls:"pt2",bcls:"b-t2",col:"#854F0B",kriteria:"40%–59% item dikuasai",lemah:"Suku Kata KVK, Suku Kata Kompleks",fokus:["Gabungan suku kata KV dan KVK","Perkataan mudah 2 suku kata","Kelancaran membaca perkataan","Latihan suku kata berstruktur"]},
+  {t:"Tahap 3",n:"Membaca Berkembang",min:60,max:84,pcls:"pt3",bcls:"b-t3",col:"#3B6D11",kriteria:"60%–84% item dikuasai",lemah:"Digraf & Diftong, Ayat",fokus:["Digraf dan diftong dalam konteks","Membaca ayat dengan intonasi","Petikan pendek dan mudah","Perbendaharaan kata"]},
+  {t:"Tahap 4",n:"Membaca Lancar",min:85,max:100,pcls:"pt4",bcls:"b-t4",col:"#185FA5",kriteria:"85% ke atas item dikuasai",lemah:"Kefahaman teks",fokus:["Kefahaman literal dan inferens","Membaca dengan fasih dan bermakna","Perbincangan teks","Pengukuhan dan pengayaan"]}
+];
+
+let db={murid:[],selectedId:null};
+let grafChart=null;
+let diagSkor={};
+let diagCat={};
+
+function genId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,5)}
+function inisial(n){return n.trim().split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2)||'?'}
+function getTahap(pct){return TAHAP.find(x=>pct>=x.min&&pct<=x.max)||null}
+
+function showTab(id){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  const map={murid:0,diag:1,profil:2,rekod:3,graf:4};
+  document.querySelectorAll('.nav-btn')[map[id]].classList.add('active');
+  if(id==='diag'){syncDropdowns('diag');if(document.getElementById('sel-murid-diag').value)loadMuridDiag();}
+  if(id==='profil'){syncDropdowns('profil');loadProfil()}
+  if(id==='rekod'){syncDropdowns('rekod');loadRekod()}
+  if(id==='graf'){syncDropdowns('graf');setTimeout(lukisGraf,80)}
+}
+
+function syncDropdowns(tab){
+  const ids={diag:'sel-murid-diag',profil:'sel-murid-profil',rekod:'sel-murid-rekod',graf:'sel-murid-graf'};
+  const id=ids[tab];if(!id)return;
+  const sel=document.getElementById(id);
+  const cur=sel.value;
+  sel.innerHTML='<option value="">— Pilih murid —</option>';
+  db.murid.forEach(m=>{const o=document.createElement('option');o.value=m.id;o.textContent=m.nama;sel.appendChild(o)});
+  if(cur&&db.murid.find(m=>m.id===cur))sel.value=cur;
+  else if(db.selectedId)sel.value=db.selectedId;
+}
+
+function getMurid(id){return db.murid.find(m=>m.id===id)}
+
+function tambahMurid(){
+  const nama=document.getElementById('inp-nama').value.trim();
+  const kelas=document.getElementById('inp-kelas').value.trim();
+  const guru=document.getElementById('inp-guru').value.trim();
+  if(!nama){alert('Sila masukkan nama murid.');return}
+  db.murid.push({id:genId(),nama,kelas,guru,diagSkor:{},diagCat:{},diagTarikh:'',rekod:[]});
+  document.getElementById('inp-nama').value='';
+  renderSenarai();
+}
+
+function uploadSenarai(inp){
+  const file=inp.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const lines=e.target.result.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+    const guru=document.getElementById('inp-guru').value.trim();
+    const kelas=document.getElementById('inp-kelas').value.trim();
+    lines.forEach(nama=>{
+      const col=nama.split(/,|;|\t/);
+      const n=(col[0]||nama).trim();const k=(col[1]||kelas).trim();const g=(col[2]||guru).trim();
+      if(n)db.murid.push({id:genId(),nama:n,kelas:k,guru:g,diagSkor:{},diagCat:{},diagTarikh:'',rekod:[]});
+    });
+    renderSenarai();inp.value='';
+  };
+  reader.readAsText(file);
+}
+
+function renderSenarai(){
+  const cari=document.getElementById('cari-murid').value.toLowerCase();
+  const list=db.murid.filter(m=>m.nama.toLowerCase().includes(cari));
+  document.getElementById('bil-murid').textContent=db.murid.length;
+  const el=document.getElementById('senarai-murid');
+  if(!list.length){el.innerHTML='<div class="no-data">Tiada murid dijumpai.</div>';return}
+  el.innerHTML=list.map(m=>{
+    const b=Object.values(m.diagSkor||{}).filter(v=>v==='b').length;
+    const pct=Math.round((b/28)*100);
+    const th=getTahap(pct);
+    const hasData=Object.keys(m.diagSkor||{}).length>0;
+    const badge=hasData?`<span class="badge ${th?th.bcls:'b-none'}">${th?th.t:'Belum dinilai'}</span>`:`<span class="badge b-none">Belum dinilai</span>`;
+    return `<div class="murid-row ${db.selectedId===m.id?'active-row':''}" onclick="pilihMurid('${m.id}')">
+      <div class="avatar">${inisial(m.nama)}</div>
+      <div style="flex:1;min-width:0"><div style="font-weight:500;font-size:13px">${m.nama}</div>
+      <div style="font-size:11px;color:var(--color-text-secondary)">${m.kelas||'—'} &nbsp;|&nbsp; ${m.guru||'—'}</div></div>
+      ${badge}
+      <div style="font-size:11px;color:var(--color-text-secondary);min-width:60px;text-align:right">${(m.rekod||[]).length} rekod</div>
+      <button class="btn btn-sm" onclick="event.stopPropagation();editMurid('${m.id}')">Edit</button>
+      <button class="btn btn-red btn-sm" onclick="event.stopPropagation();hapusMurid('${m.id}')">Padam</button>
+    </div>`;
+  }).join('');
+}
+
+function pilihMurid(id){
+  db.selectedId=id;renderSenarai();
+  const m=getMurid(id);
+  if(m)document.getElementById('pilih-msg').textContent=`Murid dipilih: ${m.nama} — Klik tab Diagnostik untuk mula menilai.`;
+}
+
+function editMurid(id){
+  const m=getMurid(id);if(!m)return;
+  const nama=prompt('Nama murid:',m.nama);if(nama===null)return;
+  const kelas=prompt('Tahun / Kelas:',m.kelas);if(kelas===null)return;
+  const guru=prompt('Nama guru:',m.guru);if(guru===null)return;
+  m.nama=nama.trim()||m.nama;m.kelas=kelas.trim();m.guru=guru.trim();
+  renderSenarai();
+}
+
+function hapusMurid(id){
+  if(!confirm('Padam murid ini beserta semua rekod?'))return;
+  db.murid=db.murid.filter(m=>m.id!==id);
+  if(db.selectedId===id)db.selectedId=null;
+  renderSenarai();
+}
+
+/* ── DIAGNOSTIK ── */
+function buildDiagTable(){
+  const tbody=document.getElementById('diag-body');
+  tbody.innerHTML='';
+  let idx=1;
+  KOMP.forEach((k,ki)=>{
+    const hdrRow=document.createElement('tr');
+    hdrRow.className='k-hdr';
+    hdrRow.innerHTML=`<td colspan="6">${k.nama}</td>`;
+    tbody.appendChild(hdrRow);
+
+    k.items.forEach((item,ii)=>{
+      const key=`${ki}-${ii}`;
+      const sv=diagSkor[key]||'';
+      const sc=diagCat[key]||'';
+      const tr=document.createElement('tr');
+      tr.innerHTML=`
+        <td style="color:var(--color-text-tertiary);font-size:11px;text-align:center">${idx}</td>
+        <td style="font-size:12px;line-height:1.4">${item}</td>
+        <td style="padding:5px 6px"><button type="button" class="pil-btn ${sv==='b'?'aktif-b':''}" data-key="${key}" data-val="b" onclick="setSkor(this)">Boleh</button></td>
+        <td style="padding:5px 6px"><button type="button" class="pil-btn ${sv==='s'?'aktif-s':''}" data-key="${key}" data-val="s" onclick="setSkor(this)">Separuh</button></td>
+        <td style="padding:5px 6px"><button type="button" class="pil-btn ${sv==='t'?'aktif-t':''}" data-key="${key}" data-val="t" onclick="setSkor(this)">Tidak</button></td>
+        <td style="padding:5px 6px"><input class="cat-input" type="text" value="${sc}" placeholder="catatan..." data-key="${key}" onchange="diagCat[this.dataset.key]=this.value"></td>
+      `;
+      tbody.appendChild(tr);
+      idx++;
+    });
+  });
+}
+
+function setSkor(btn){
+  const key=btn.dataset.key;
+  const val=btn.dataset.val;
+  diagSkor[key]=val;
+  const row=btn.closest('tr');
+  row.querySelectorAll('.pil-btn').forEach(b=>{
+    b.classList.remove('aktif-b','aktif-s','aktif-t');
+  });
+  const cls={b:'aktif-b',s:'aktif-s',t:'aktif-t'};
+  btn.classList.add(cls[val]);
+  updateSkorDiag();
+}
+
+function updateSkorDiag(){
+  let b=0,s=0,t=0;
+  Object.values(diagSkor).forEach(v=>{if(v==='b')b++;else if(v==='s')s++;else if(v==='t')t++;});
+  const pct=Math.round((b/28)*100);
+  document.getElementById('jb').textContent=b;
+  document.getElementById('js').textContent=s;
+  document.getElementById('jt').textContent=t;
+  document.getElementById('jp').textContent=pct+'%';
+  const th=getTahap(pct);
+  const el=document.getElementById('jth');
+  el.textContent=th?th.t+' — '+th.n:'—';
+  el.style.color=th?th.col:'var(--color-text-primary)';
+}
+
+function loadMuridDiag(){
+  const id=document.getElementById('sel-murid-diag').value;
+  if(!id)return;
+  db.selectedId=id;
+  const m=getMurid(id);if(!m)return;
+  document.getElementById('diag-kelas').value=m.kelas||'';
+  document.getElementById('diag-guru').value=m.guru||'';
+  document.getElementById('diag-tarikh').value=m.diagTarikh||new Date().toISOString().split('T')[0];
+  diagSkor=Object.assign({},m.diagSkor||{});
+  diagCat=Object.assign({},m.diagCat||{});
+  buildDiagTable();
+  updateSkorDiag();
+}
+
+function resetDiag(){
+  diagSkor={};diagCat={};
+  buildDiagTable();updateSkorDiag();
+}
+
+function simpanDiag(){
+  const id=document.getElementById('sel-murid-diag').value;
+  if(!id){alert('Sila pilih murid terlebih dahulu.');return}
+  const m=getMurid(id);if(!m)return;
+  m.diagSkor=Object.assign({},diagSkor);
+  m.diagCat=Object.assign({},diagCat);
+  m.diagTarikh=document.getElementById('diag-tarikh').value;
+  renderSenarai();
+  alert(`Rekod diagnostik ${m.nama} berjaya disimpan.`);
+}
+
+/* ── PROFIL ── */
+function loadProfil(){
+  const id=document.getElementById('sel-murid-profil').value;
+  const el=document.getElementById('profil-content');
+  if(!id){el.innerHTML='<div class="no-data">Pilih murid untuk melihat profil.</div>';buildTierRef(-1);return}
+  const m=getMurid(id);if(!m)return;
+  db.selectedId=id;
+  const b=Object.values(m.diagSkor||{}).filter(v=>v==='b').length;
+  const pct=Math.round((b/28)*100);
+  const th=getTahap(pct);
+  const ti=th?TAHAP.indexOf(th):-1;
+  const hasData=Object.keys(m.diagSkor||{}).length>0;
+  el.innerHTML=`
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:1rem">
+      <div class="stat-c"><div class="stat-v">${m.nama.split(' ')[0]}</div><div class="stat-l">Nama Murid</div></div>
+      <div class="stat-c"><div class="stat-v">${m.kelas||'—'}</div><div class="stat-l">Kelas</div></div>
+      <div class="stat-c"><div class="stat-v" style="color:${th?th.col:'var(--color-text-primary)'}">${hasData?pct+'%':'Belum dinilai'}</div><div class="stat-l">% Penguasaan</div></div>
+    </div>
+    ${hasData&&th?`<div class="profil-tier ${th.pcls} pt-active">
+      <span class="badge ${th.bcls}" style="margin-bottom:6px;display:inline-block">${th.t}</span>
+      <div style="font-size:14px;font-weight:500;margin-bottom:3px">${th.n}</div>
+      <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px">${th.kriteria}</div>
+      <div style="font-size:12px"><strong>Komponen perlu diberi perhatian:</strong> ${th.lemah}</div>
+      <div style="margin-top:8px;font-size:12px"><strong>Cadangan Fokus Intervensi:</strong></div>
+      <ul style="margin:5px 0 0 16px;font-size:12px;line-height:1.7">${th.fokus.map(f=>`<li>${f}</li>`).join('')}</ul>
+    </div>`:'<div style="font-size:13px;color:var(--color-text-secondary)">Sila lengkapkan penilaian diagnostik terlebih dahulu.</div>'}
+  `;
+  buildTierRef(ti);
+}
+
+function buildTierRef(aktif){
+  document.getElementById('tier-ref').innerHTML=TAHAP.map((t,i)=>`
+    <div class="profil-tier ${t.pcls} ${i===aktif?'pt-active':''}">
+      <span class="badge ${t.bcls}" style="margin-bottom:5px;display:inline-block">${t.t}</span>
+      <div style="font-size:13px;font-weight:500">${t.n}</div>
+      <div style="font-size:11px;color:var(--color-text-secondary);margin:3px 0 5px">${t.kriteria}</div>
+      <div style="font-size:11px;color:var(--color-text-secondary)">${t.fokus.map(f=>'• '+f).join(' &nbsp; ')}</div>
+    </div>`).join('');
+}
+
+/* ── REKOD MINGGUAN ── */
+function loadRekod(){
+  const id=document.getElementById('sel-murid-rekod').value;
+  if(!id){document.getElementById('rekod-form').innerHTML='<div class="no-data">Pilih murid untuk merekod.</div>';renderAllRekod();return}
+  db.selectedId=id;
+  const m=getMurid(id);if(!m)return;
+  const sel=document.getElementById('sel-minggu');
+  sel.innerHTML='<option value="">— Pilih minggu —</option>';
+  (m.rekod||[]).forEach((r,i)=>{
+    const o=document.createElement('option');o.value=i;o.textContent=`Minggu ${r.minggu} — ${r.tarikh||'tiada tarikh'}`;sel.appendChild(o);
+  });
+  document.getElementById('rekod-form').innerHTML='<div class="no-data">Pilih minggu atau tambah minggu baharu.</div>';
+  renderAllRekod();
+}
+
+function tambahMinggu(){
+  const id=document.getElementById('sel-murid-rekod').value;
+  if(!id){alert('Pilih murid dahulu.');return}
+  const m=getMurid(id);if(!m)return;
+  m.rekod=m.rekod||[];
+  const next=m.rekod.length>0?Math.max(...m.rekod.map(r=>r.minggu))+1:1;
+  m.rekod.push({minggu:next,tarikh:new Date().toISOString().split('T')[0],komponen:'',kel:0,seb:0,kef:0,salah:'',catatan:''});
+  loadRekod();
+  const sel=document.getElementById('sel-minggu');sel.value=m.rekod.length-1;loadEntriMinggu();
+}
+
+function loadEntriMinggu(){
+  const id=document.getElementById('sel-murid-rekod').value;
+  const idx=document.getElementById('sel-minggu').value;
+  const el=document.getElementById('rekod-form');
+  if(!id||idx===''){el.innerHTML='<div class="no-data">Pilih murid dan minggu.</div>';return}
+  const m=getMurid(id);if(!m)return;
+  const r=m.rekod[parseInt(idx)];if(!r)return;
+  el.innerHTML=`
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:0.9rem">
+      <div class="field"><label>Minggu</label><input value="Minggu ${r.minggu}" readonly style="background:var(--color-background-secondary)"></div>
+      <div class="field"><label>Tarikh</label><input type="date" value="${r.tarikh}" onchange="updateRek(${idx},'tarikh',this.value)"></div>
+      <div class="field"><label>Komponen Fokus</label>
+        <select onchange="updateRek(${idx},'komponen',this.value)">
+          <option value="">— Pilih komponen —</option>
+          ${KOMP.map(k=>`<option value="${k.nama}" ${r.komponen===k.nama?'selected':''}>${k.nama}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:0.9rem">
+      <div class="field"><label>Skor Kelancaran (1–3)</label><div class="dot3">${mkDots(idx,'kel',r.kel)}</div></div>
+      <div class="field"><label>Skor Sebutan (1–3)</label><div class="dot3">${mkDots(idx,'seb',r.seb)}</div></div>
+      <div class="field"><label>Skor Kefahaman (1–3)</label><div class="dot3">${mkDots(idx,'kef',r.kef)}</div></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Kesalahan lazim dikesan</label><textarea onchange="updateRek(${idx},'salah',this.value)">${r.salah||''}</textarea></div>
+      <div class="field"><label>Catatan & tindakan guru</label><textarea onchange="updateRek(${idx},'catatan',this.value)">${r.catatan||''}</textarea></div>
+    </div>
+  `;
+}
+
+function mkDots(idx,field,val){
+  return [1,2,3].map(n=>`<span class="d${n} ${val===n?'on':''}" onclick="setDot(${idx},'${field}',${n},this)">${n}</span>`).join('');
+}
+function setDot(idx,field,val,el){
+  const id=document.getElementById('sel-murid-rekod').value;
+  const m=getMurid(id);if(!m)return;
+  m.rekod[idx][field]=val;
+  const cont=el.closest('.dot3');
+  cont.querySelectorAll('span').forEach((s,i)=>{s.className=`d${i+1}${(i+1)===val?' on':''}`;});
+}
+function updateRek(idx,field,val){
+  const id=document.getElementById('sel-murid-rekod').value;
+  const m=getMurid(id);if(!m)return;
+  m.rekod[idx][field]=val;
+}
+function simpanRekod(){
+  const id=document.getElementById('sel-murid-rekod').value;
+  if(!id){alert('Pilih murid dahulu.');return}
+  renderAllRekod();alert('Rekod disimpan.');
+}
+function renderAllRekod(){
+  const id=document.getElementById('sel-murid-rekod').value;
+  const el=document.getElementById('rekod-all');
+  if(!id){el.innerHTML='<div class="no-data">Pilih murid untuk melihat rekod.</div>';return}
+  const m=getMurid(id);if(!m||!m.rekod||!m.rekod.length){el.innerHTML='<div class="no-data">Tiada rekod mingguan lagi.</div>';return}
+  el.innerHTML=[...m.rekod].reverse().map((r,ri)=>{
+    const avg=r.kel&&r.seb&&r.kef?((r.kel+r.seb+r.kef)/3).toFixed(1):null;
+    const status=avg?parseFloat(avg)>=2.5?'Baik':parseFloat(avg)>=1.5?'Sederhana':'Perlu Perhatian':null;
+    const sc=status==='Baik'?'#3B6D11':status==='Sederhana'?'#854F0B':'#A32D2D';
+    return `<div class="rekod-entry">
+      <div class="rekod-entry-hdr">
+        <div style="font-weight:500;font-size:13px">Minggu ${r.minggu} <span style="font-weight:400;color:var(--color-text-secondary);font-size:12px">${r.tarikh||''}</span></div>
+        <div style="display:flex;align-items:center;gap:8px">
+          ${avg?`<span style="font-size:12px;color:${sc};font-weight:500">Min ${avg} — ${status}</span>`:''}
+          <button class="btn btn-red btn-sm" onclick="hapusRekod('${id}',${m.rekod.length-1-ri})">Padam</button>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;font-size:12px">
+        <div><div style="color:var(--color-text-secondary);margin-bottom:2px">Komponen</div><div>${r.komponen||'—'}</div></div>
+        <div><div style="color:var(--color-text-secondary);margin-bottom:2px">Kelancaran</div><div style="font-weight:500">${r.kel||'—'}</div></div>
+        <div><div style="color:var(--color-text-secondary);margin-bottom:2px">Sebutan</div><div style="font-weight:500">${r.seb||'—'}</div></div>
+        <div><div style="color:var(--color-text-secondary);margin-bottom:2px">Kefahaman</div><div style="font-weight:500">${r.kef||'—'}</div></div>
+      </div>
+      ${r.salah||r.catatan?`<div style="margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px">
+        ${r.salah?`<div><span style="color:var(--color-text-secondary)">Kesalahan: </span>${r.salah}</div>`:''}
+        ${r.catatan?`<div><span style="color:var(--color-text-secondary)">Catatan: </span>${r.catatan}</div>`:''}
+      </div>`:''}
+    </div>`;
+  }).join('');
+}
+function hapusRekod(mid,ri){
+  if(!confirm('Padam rekod minggu ini?'))return;
+  const m=getMurid(mid);if(!m)return;
+  m.rekod.splice(ri,1);loadRekod();
+}
+
+/* ── GRAF ── */
+function lukisGraf(){
+  const id=document.getElementById('sel-murid-graf').value;
+  const statsEl=document.getElementById('graf-stats');
+  if(!id){statsEl.innerHTML='<div class="stat-c"><div class="stat-v">—</div><div class="stat-l">Nama Murid</div></div><div class="stat-c"><div class="stat-v">0</div><div class="stat-l">Jumlah Rekod</div></div><div class="stat-c"><div class="stat-v">—</div><div class="stat-l">Min Skor Terkini</div></div><div class="stat-c"><div class="stat-v">—</div><div class="stat-l">Trend</div></div>';return}
+  db.selectedId=id;
+  const m=getMurid(id);if(!m)return;
+  const data=(m.rekod||[]).filter(r=>r.kel>0||r.seb>0||r.kef>0).sort((a,b)=>a.minggu-b.minggu);
+  const last=data[data.length-1];
+  const minSkor=last&&last.kel&&last.seb&&last.kef?((last.kel+last.seb+last.kef)/3).toFixed(1):'—';
+  let trend='—',tCol='var(--color-text-primary)';
+  if(data.length>=3){
+    const awal=(data[0].kel+data[0].seb+data[0].kef)/3;
+    const akhir=(last.kel+last.seb+last.kef)/3;
+    const d=akhir-awal;
+    trend=d>0.2?'Menaik':d<-0.2?'Menurun':'Mendatar';
+    tCol=trend==='Menaik'?'#3B6D11':trend==='Menurun'?'#A32D2D':'#854F0B';
+  }
+  statsEl.innerHTML=`
+    <div class="stat-c"><div class="stat-v">${m.nama.split(' ')[0]}</div><div class="stat-l">Nama Murid</div></div>
+    <div class="stat-c"><div class="stat-v">${data.length}</div><div class="stat-l">Jumlah Rekod</div></div>
+    <div class="stat-c"><div class="stat-v" style="color:#185FA5">${minSkor}</div><div class="stat-l">Min Skor Terkini</div></div>
+    <div class="stat-c"><div class="stat-v" style="color:${tCol}">${trend}</div><div class="stat-l">Trend</div></div>
+  `;
+  if(grafChart){grafChart.destroy();}
+  if(!data.length)return;
+  const labels=data.map(r=>`M${r.minggu}`);
+  const gridC='rgba(128,128,128,0.1)';
+  const ctx=document.getElementById('grafCanvas').getContext('2d');
+  grafChart=new Chart(ctx,{
+    type:'line',
+    data:{labels,datasets:[
+      {label:'Kelancaran',data:data.map(r=>r.kel||null),borderColor:'#185FA5',backgroundColor:'rgba(24,95,165,0.07)',tension:0.3,pointRadius:5,borderWidth:2},
+      {label:'Sebutan',data:data.map(r=>r.seb||null),borderColor:'#3B6D11',backgroundColor:'rgba(59,109,17,0.07)',tension:0.3,pointRadius:5,borderWidth:2},
+      {label:'Kefahaman',data:data.map(r=>r.kef||null),borderColor:'#854F0B',backgroundColor:'rgba(133,79,11,0.07)',tension:0.3,pointRadius:5,borderWidth:2},
+      {label:'Sasaran',data:data.map(()=>2.5),borderColor:'rgba(163,45,45,0.4)',borderDash:[5,5],pointRadius:0,borderWidth:1.5,fill:false}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false}},
+      scales:{y:{min:0,max:3,ticks:{stepSize:1,font:{size:11}},grid:{color:gridC}},x:{ticks:{font:{size:11}},grid:{color:gridC}}}
+    }
+  });
+}
+
+buildTierRef(-1);
+buildDiagTable();
+document.getElementById('diag-tarikh').valueAsDate=new Date();
+</script>
